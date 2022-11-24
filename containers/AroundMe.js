@@ -1,4 +1,4 @@
-import { AntDesign } from "@expo/vector-icons";
+import { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -7,16 +7,17 @@ import {
   StyleSheet,
   FlatList,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
-import { useState, useEffect } from "react";
 import { ActivityIndicator, Dimensions } from "react-native";
 import * as Location from "expo-location";
 import MapView from "react-native-maps";
+import { AntDesign } from "@expo/vector-icons";
 
 import axios from "axios";
 
-export default function RoomScreen() {
-  const { params } = useRoute();
+export default function AroundMe() {
+  const latitudeParisND = 48.8529371;
+  const longitudeParisND = 2.3500501;
+
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState();
 
@@ -24,7 +25,6 @@ export default function RoomScreen() {
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
   const [coords, setCoords] = useState();
 
-  //console.log("params -> ", params.id);
   useEffect(() => {
     const askPermission = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -47,7 +47,7 @@ export default function RoomScreen() {
     const loadData = async () => {
       try {
         const response = await axios.get(
-          `https://express-airbnb-api.herokuapp.com/rooms/${params.id}`
+          `https://express-airbnb-api.herokuapp.com/rooms/around?latitude=${latitudeParisND}&longitude=${longitudeParisND}`
         );
 
         setData(response.data);
@@ -59,7 +59,7 @@ export default function RoomScreen() {
 
     askPermission();
     loadData();
-  }, [params.id]);
+  }, [latitudeParisND, longitudeParisND]);
 
   return isLoadingAuth ? (
     <ActivityIndicator size="large" color="purple" style={{ marginTop: 100 }} />
@@ -70,29 +70,34 @@ export default function RoomScreen() {
   ) : (
     <View style={styles.mainContainer}>
       <Image source={require("../assets/logo.png")} style={styles.logo} />
-      <ScrollView style={styles.imageContainer} horizontal>
-        {data.photos.map((item, index) => {
-          //console.log("Bcl -> ", data.photos);
-          return (
-            <Image
-              key={index}
-              style={styles.photoFlat}
-              source={{ uri: item.url }}
-            />
-          );
-        })}
-      </ScrollView>
       <View style={styles.containerMap}>
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: data.location[1],
-            longitude: data.location[0],
+            latitude: latitudeParisND,
+            longitude: longitudeParisND,
             latitudeDelta: 0.08,
             longitudeDelta: 0.08,
           }}
           showsUserLocation={true}
-        />
+        >
+          {data.map((room) => {
+            //console.log("bcl -> ", room._id, " - ", room.location[0]);
+
+            return (
+              <MapView.Marker
+                key={room._id}
+                coordinate={{
+                  latitude: room.location[1],
+                  longitude: room.location[0],
+                }}
+                title={room.title}
+                description={room.description}
+                image={<AntDesign name="flag" size={24} color="black" />}
+              />
+            );
+          })}
+        </MapView>
       </View>
     </View>
   );
@@ -115,11 +120,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  photoFlat: {
-    width: 300,
-    height: 200,
-  },
-
   containerMap: {
     flex: 1,
     backgroundColor: "#fff",
@@ -128,9 +128,9 @@ const styles = StyleSheet.create({
   },
 
   map: {
-    // width: Dimensions.get("window").width,
-    // height: Dimensions.get("window").height,
-    height: 400,
-    width: 400,
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
+    // height: 400,
+    // width: 400,
   },
 });
