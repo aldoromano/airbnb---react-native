@@ -1,5 +1,8 @@
 import { useNavigation } from "@react-navigation/core";
 import { useState, useEffect } from "react";
+import { AntDesign } from "@expo/vector-icons";
+import { ActivityIndicator } from "react-native";
+
 import {
   Button,
   Text,
@@ -8,6 +11,7 @@ import {
   ScrollView,
   StyleSheet,
   FlatList,
+  TouchableOpacity,
 } from "react-native";
 import axios from "axios";
 
@@ -38,12 +42,41 @@ export default function HomeScreen() {
     return null;
   }
 
-  const renderItem = ({ item }) => (
-    <View>
-      <Image source={item.photos[0].url} />
-      <Text>{console.log(item.photos[0].url)}</Text>
-    </View>
-  );
+  const renderItem = ({ item }) => {
+    const tab = [];
+    for (let i = 0; i < item.ratingValue; i++) {
+      tab.push(i);
+    }
+    return (
+      <View style={styles.photoBorder}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={() => navigation.navigate("Room", { id: item._id })}
+        >
+          <Image
+            style={styles.photoFlat}
+            source={{ uri: item.photos[0].url }}
+          />
+        </TouchableOpacity>
+        <View style={styles.photoTitleContainer}>
+          <View style={styles.titleStarContainer}>
+            <Text style={styles.titleFlat}>{item.title}</Text>
+            <View style={styles.starContainer}>
+              {tab.map((elem, index) => {
+                return (
+                  <AntDesign name="star" size={24} color="orange" key={index} />
+                );
+              })}
+            </View>
+          </View>
+          <Image
+            style={styles.photoAccount}
+            source={{ uri: item.user.account.photo.url }}
+          />
+        </View>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.mainContainer}>
@@ -51,7 +84,11 @@ export default function HomeScreen() {
       <Text>Welcome home!</Text>
 
       {isLoading ? (
-        <Text>Loading ... </Text>
+        <ActivityIndicator
+          size="large"
+          color="purple"
+          style={{ marginTop: 100 }}
+        />
       ) : (
         <FlatList
           data={data}
@@ -74,12 +111,46 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   mainContainer: {
     alignItems: "center",
+    flex: 1,
     // marginVertical: 25,
   },
 
   logo: {
     width: 100,
     height: 100,
+  },
+
+  photoFlat: {
+    width: 350,
+    height: 150,
+  },
+
+  photoTitleContainer: {
+    // marginTop: 10,
+    height: 50,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+
+  TitleStarContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
+  starContainer: {
+    flexDirection: "row",
+    // justifyContent: "space-evenly",
+  },
+
+  photoAccount: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+  },
+
+  titleFlat: {
+    // marginTop: 15,
+    fontWeight: "bold",
   },
 
   btn: {
@@ -91,5 +162,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: 40,
     borderRadius: 10,
+  },
+
+  photoBorder: {
+    borderBottomColor: "#ffbac0",
+    borderBottomWidth: 1,
+    height: 250,
+    width: 350,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

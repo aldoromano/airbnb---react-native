@@ -15,6 +15,7 @@ import ProfileScreen from "./containers/ProfileScreen";
 import SignInScreen from "./containers/SignInScreen";
 import SignUpScreen from "./containers/SignUpScreen";
 import SettingsScreen from "./containers/SettingsScreen";
+import RoomScreen from "./containers/RoomScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -32,6 +33,27 @@ export default function App() {
 
     setUserToken(token);
   };
+
+  useEffect(() => {
+    // Fetch the token from storage then navigate to our appropriate place
+    const checkIfATokenExist = async () => {
+      // We should also handle error for production apps
+      const userToken = await AsyncStorage.getItem("userToken");
+
+      // This will switch to the App screen or Auth screen and this loading
+      // screen will be unmounted and thrown away.
+      setUserToken(userToken);
+
+      setIsLoading(false);
+    };
+
+    checkIfATokenExist();
+  }, []);
+
+  if (isLoading === true) {
+    // We haven't finished checking for the token yet
+    return null;
+  }
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -70,12 +92,23 @@ export default function App() {
                       <Stack.Screen
                         name="Home"
                         options={{
-                          title: "My App",
+                          title: "List",
                           headerStyle: { backgroundColor: "red" },
                           headerTitleStyle: { color: "white" },
                         }}
                       >
                         {() => <HomeScreen />}
+                      </Stack.Screen>
+
+                      <Stack.Screen
+                        name="Room"
+                        options={{
+                          title: "Room Detail",
+                          headerStyle: { backgroundColor: "red" },
+                          headerTitleStyle: { color: "white" },
+                        }}
+                      >
+                        {() => <RoomScreen />}
                       </Stack.Screen>
 
                       <Stack.Screen

@@ -15,8 +15,8 @@ import { useState } from "react";
 export default function SignInScreen({ setToken }) {
   const navigation = useNavigation();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("bb@gmail.com");
+  const [password, setPassword] = useState("a");
   const [error, setError] = useState("");
 
   const submit = async () => {
