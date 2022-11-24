@@ -14,6 +14,7 @@ import * as Location from "expo-location";
 import MapView from "react-native-maps";
 
 import axios from "axios";
+import Swiper from "react-native-swiper";
 
 export default function RoomScreen() {
   const { params } = useRoute();
@@ -70,18 +71,28 @@ export default function RoomScreen() {
   ) : (
     <View style={styles.mainContainer}>
       <Image source={require("../assets/logo.png")} style={styles.logo} />
-      <ScrollView style={styles.imageContainer} horizontal>
+      {/* <ScrollView style={styles.imageContainer} horizontal> */}
+      <Swiper
+        style={styles.wrapper}
+        dotColor="salmon"
+        activeDotColor="red"
+        autoplay
+        pagination
+      >
         {data.photos.map((item, index) => {
-          //console.log("Bcl -> ", data.photos);
           return (
-            <Image
-              key={index}
-              style={styles.photoFlat}
-              source={{ uri: item.url }}
-            />
+            <View style={styles.slide} key={index}>
+              <Image
+                key={index}
+                // style={styles.photoFlat}
+                style={{ height: "100%", width: "100%" }}
+                source={{ uri: item.url }}
+              />
+            </View>
           );
         })}
-      </ScrollView>
+      </Swiper>
+
       <View style={styles.containerMap}>
         <MapView
           style={styles.map}
@@ -109,6 +120,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     flex: 1,
   },
+
   logo: {
     width: 50,
     height: 50,
@@ -117,7 +129,15 @@ const styles = StyleSheet.create({
 
   photoFlat: {
     width: 300,
-    height: 200,
+    height: 300,
+  },
+
+  wrapper: {
+    height: 300,
+  },
+
+  slide: {
+    height: 300,
   },
 
   containerMap: {

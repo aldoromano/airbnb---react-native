@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { ActivityIndicator, Dimensions } from "react-native";
 import * as Location from "expo-location";
-import MapView from "react-native-maps";
+import MapView, { PROVIDER_GOOGLE, Marker } from "react-native-maps";
 import { AntDesign } from "@expo/vector-icons";
 
 import axios from "axios";
@@ -81,11 +81,11 @@ export default function AroundMe() {
           }}
           showsUserLocation={true}
         >
-          {data.map((room) => {
-            //console.log("bcl -> ", room._id, " - ", room.location[0]);
+          {data.map((room, index) => {
+            console.log("bcl -> ", index);
 
             return (
-              <MapView.Marker
+              <Marker
                 key={room._id}
                 coordinate={{
                   latitude: room.location[1],
@@ -93,7 +93,7 @@ export default function AroundMe() {
                 }}
                 title={room.title}
                 description={room.description}
-                image={<AntDesign name="flag" size={24} color="black" />}
+                // image={<AntDesign name="flag" size={24} color="black" />}
               />
             );
           })}
