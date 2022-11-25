@@ -14,7 +14,7 @@ import { AntDesign } from "@expo/vector-icons";
 
 import axios from "axios";
 
-export default function AroundMe() {
+export default function AroundMeScreen() {
   const latitudeParisND = 48.8529371;
   const longitudeParisND = 2.3500501;
 
@@ -73,9 +73,11 @@ export default function AroundMe() {
       <View style={styles.containerMap}>
         <MapView
           style={styles.map}
+          provider={PROVIDER_GOOGLE}
           initialRegion={{
             latitude: latitudeParisND,
             longitude: longitudeParisND,
+
             latitudeDelta: 0.08,
             longitudeDelta: 0.08,
           }}

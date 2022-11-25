@@ -15,7 +15,7 @@ import {
 } from "react-native";
 import axios from "axios";
 
-export default function HomeScreen() {
+export default function HomeScreen(setToken) {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState();
@@ -98,12 +98,12 @@ export default function HomeScreen() {
         />
       )}
 
-      <Button
+      {/* <Button
         title="Go to Profile !!"
         onPress={() => {
           navigation.navigate("Profile", { userId: 123 });
         }}
-      />
+      /> */}
     </View>
   );
 }

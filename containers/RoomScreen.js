@@ -14,7 +14,7 @@ import * as Location from "expo-location";
 import MapView from "react-native-maps";
 
 import axios from "axios";
-import Swiper from "react-native-swiper";
+// import Swiper from "react-native-swiper";
 
 export default function RoomScreen() {
   const { params } = useRoute();
@@ -71,27 +71,28 @@ export default function RoomScreen() {
   ) : (
     <View style={styles.mainContainer}>
       <Image source={require("../assets/logo.png")} style={styles.logo} />
-      {/* <ScrollView style={styles.imageContainer} horizontal> */}
-      <Swiper
+      <ScrollView style={styles.imageContainer} horizontal>
+        {/* <Swiper
         style={styles.wrapper}
         dotColor="salmon"
         activeDotColor="red"
         autoplay
         pagination
-      >
+      > */}
         {data.photos.map((item, index) => {
           return (
             <View style={styles.slide} key={index}>
               <Image
                 key={index}
-                // style={styles.photoFlat}
-                style={{ height: "100%", width: "100%" }}
+                style={styles.photoFlat}
+                //style={{ height: "100%", width: "100%" }}
                 source={{ uri: item.url }}
               />
             </View>
           );
         })}
-      </Swiper>
+        {/* </Swiper> */}
+      </ScrollView>
 
       <View style={styles.containerMap}>
         <MapView

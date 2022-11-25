@@ -12,7 +12,7 @@ import {
 import axios from "axios";
 import { useState } from "react";
 
-export default function SignInScreen({ setToken }) {
+export default function SignInScreen({ setToken, setId }) {
   const navigation = useNavigation();
 
   const [email, setEmail] = useState("bb@gmail.com");
@@ -37,6 +37,7 @@ export default function SignInScreen({ setToken }) {
       );
 
       setToken(response.data.token);
+      setId(response.data.id);
     } catch (error) {
       console.log(error.response.data);
     }

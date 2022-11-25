@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import axios from "axios";
 
-export default function SignUpScreen({ setToken }) {
+export default function SignUpScreen({ setToken, setId }) {
   const [email, setEmail] = useState("");
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
@@ -43,6 +43,7 @@ export default function SignUpScreen({ setToken }) {
       );
 
       setToken(response.data.token);
+      setId(response.data._id);
     } catch (error) {
       console.log(error.response.data);
     }
