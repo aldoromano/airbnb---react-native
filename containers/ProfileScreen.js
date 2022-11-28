@@ -104,11 +104,12 @@ export default function ProfileScreen({ id, setId, setToken, token }) {
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
     } catch (error) {
-      console.log("error rsp -> ", error.response);
+      console.log("error rsp -> ", error.message);
       setError("MAJ Photo  refusée");
     }
 
