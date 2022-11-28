@@ -78,8 +78,6 @@ export default function ProfileScreen({ id, setId, setToken, token }) {
     } else {
       console.log("Permission refusée");
     }
-
-    
   };
 
   // MAJ profil utilisateur
@@ -92,15 +90,13 @@ export default function ProfileScreen({ id, setId, setToken, token }) {
     }
 
     try {
-
       const tab = selectedPicture.split(".");
-      try {
-        const formData = new FormData();
-        formData.append("photo", {
-          uri: selectedPicture,
-          name: `my-pic.${tab[1]}`,
-          type: `image/${tab[1]}`,
-        });
+      const formData = new FormData();
+      formData.append("photo", {
+        uri: selectedPicture,
+        name: `my-pic.${tab[1]}`,
+        type: `image/${tab[1]}`,
+      });
 
       const response = await axios.put(
         "https://express-airbnb-api.herokuapp.com/user/upload_picture",
