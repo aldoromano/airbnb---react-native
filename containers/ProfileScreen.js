@@ -78,6 +78,8 @@ export default function ProfileScreen({ id, setId, setToken, token }) {
     } else {
       console.log("Permission refusée");
     }
+
+    
   };
 
   // MAJ profil utilisateur
@@ -90,11 +92,19 @@ export default function ProfileScreen({ id, setId, setToken, token }) {
     }
 
     try {
+
+      const tab = selectedPicture.split(".");
+      try {
+        const formData = new FormData();
+        formData.append("photo", {
+          uri: selectedPicture,
+          name: `my-pic.${tab[1]}`,
+          type: `image/${tab[1]}`,
+        });
+
       const response = await axios.put(
         "https://express-airbnb-api.herokuapp.com/user/upload_picture",
-        {
-          photo: selectedPicture,
-        },
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -102,8 +112,10 @@ export default function ProfileScreen({ id, setId, setToken, token }) {
         }
       );
     } catch (error) {
+      console.log("error rsp -> ", error.response);
       setError("MAJ Photo  refusée");
     }
+
     try {
       const response = await axios.put(
         "https://express-airbnb-api.herokuapp.com/user/update",
@@ -167,7 +179,7 @@ export default function ProfileScreen({ id, setId, setToken, token }) {
 
         <Text>Username: </Text>
         <TextInput
-          style={StyleSheet.input}
+          style={styles.input}
           onChangeText={(text) => setUserName(text)}
           value={userName}
           placeholder="username"
@@ -176,7 +188,7 @@ export default function ProfileScreen({ id, setId, setToken, token }) {
 
         <Text>Description: </Text>
         <TextInput
-          style={StyleSheet.input}
+          style={styles.input}
           onChangeText={(text) => setDescription(text)}
           value={description}
           placeholder="passwdescriptionord"
@@ -215,8 +227,8 @@ const styles = StyleSheet.create({
   },
 
   input: {
-    borderBottomColor: "#ffbac0",
-    borderBottomWidth: 2,
+    borderColor: "#ffbac0",
+    borderWidth: 2,
     height: 30,
     width: 300,
     marginTop: 10,
