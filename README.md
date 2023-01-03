@@ -11,3 +11,4 @@ Principales fonctionnalités :
 
 * yarn pour l'initialisation
 * Mapview
+* Axios
