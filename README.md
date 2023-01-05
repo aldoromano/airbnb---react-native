@@ -1,4 +1,4 @@
-# Réplique de airbnb en React Native
+# Réplique de airbnb en React Native (formation au REACTEUR)
 
 Réplique du site mobile airbnb.
 Principales fonctionnalités :
